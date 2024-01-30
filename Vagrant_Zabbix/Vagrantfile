@@ -1,0 +1,17 @@
+Vagrant.configure("2") do |config|
+    config.vm.box = "ubuntu/bionic64"
+    config.vm.network "forwarded_port", guest: 80, host: 8080
+    config.vm.network "forwarded_port", guest: 10051, host: 10051
+    config.vm.provider "virtualbox" do |vb|
+    config.vm.boot_timeout = 600
+ 
+      vb.memory = "2048"
+      vb.cpus = 2
+    end
+  
+    # Adiciona provisionamento para conceder permissão ao script
+    config.vm.provision "shell", inline: <<-SHELL
+      chmod +x /vagrant/install_zabbix_mysql.sh
+      /vagrant/install_zabbix_mysql.sh
+    SHELL
+  end
